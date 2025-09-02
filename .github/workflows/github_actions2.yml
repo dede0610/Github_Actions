@@ -1,0 +1,26 @@
+name: test-github-actions
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  add-file-with-sha:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: echo test
+        run: echo ${{ github.actor }} is trying GitHub Actions
+      
+      - name: Save image tag to file
+        run: echo "${{ github.sha }}" > .image-tag
+
+      - name: Commit image tag file
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add .image-tag
+          git commit -m "Save image tag for test promotion"
+          git push
+        
